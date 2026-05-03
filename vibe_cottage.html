@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cottagecore Preview | CAPITelle</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --bg-main: #fcf8f2;
+            --text-main: #4a5d4a;
+            --accent-soft: #e8d5c4;
+            --primary: #8b9d83;
+        }
+        body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Georgia', serif; }
+        .preview-nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: #fffaf5; border-bottom: 2px solid var(--accent-soft); }
+        .back-group { display: flex; align-items: center; gap: 15px; }
+        .btn-back { text-decoration: none; color: var(--text-main); font-weight: 600; }
+        .implement-btn { background: var(--primary); color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; }
+        .card { background: white; border: 1px solid var(--accent-soft); border-radius: 15px; }
+    </style>
+</head>
+<body>
+    <nav class="preview-nav">
+        <div class="back-group">
+            <a href="settings.html" class="btn-back">← Back</a>
+            <span class="logo" style="pointer-events: none; color: var(--text-main);">CAPIT**elle**</span>
+        </div>
+        <a href="index.html" class="implement-btn">Implement</a>
+    </nav>
+    <div class="container" style="margin-top: 50px; text-align: center;">
+        <h1 style="font-size: 3rem;">Welcome Home, Lobelia</h1>
+        <p>Your financial flora is thriving today.</p>
+        <div class="card" style="max-width: 600px; margin: 40px auto; padding: 40px;">
+            <h3>Monthly Overview</h3>
+            <p style="font-size: 2rem; color: var(--primary);">$15,420.00</p>
+        </div>
+    </div>
+</body>
+</html>
