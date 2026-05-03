@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .logo { text-decoration: none; font-size: 1.6rem; font-weight: 800; }
-        .main-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; margin-top: 20px; }
+        /* Set initial display to none for the demo transition */
+        .main-layout { display: none; grid-template-columns: 1fr 320px; gap: 20px; margin-top: 20px; }
         .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
         
         .account-card { background: #f9fafb; border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
@@ -15,7 +16,7 @@
         .account-balance { font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 4px 0; }
         .account-type { font-size: 0.7rem; background: #e5e7eb; padding: 2px 8px; border-radius: 10px; display: inline-block; }
         
-        .mini-goal-card { background: #fffbeb; border: 2px solid #fcd34d; border-radius: 12px; padding: 15px; margin-top: 20px; }
+        .mini-goal-card { background: #fffbeb; border: 2px solid #fcd34d; border-radius: 12px; padding: 15px; margin-top: 20px; display: none; }
         .mini-bar-bg { background: #fef3c7; height: 8px; border-radius: 4px; margin: 10px 0; overflow: hidden; }
         .mini-bar-fill { background: #d4af37; height: 100%; width: 0%; transition: width 1s ease-in-out; }
 
@@ -52,17 +53,19 @@
             <button class="demo-btn" onclick="runDemo()">🪄 Run Live Demo</button>
         </div>
 
-        <div class="main-layout">
-            <div class="content-col">
-                <div class="card ai-input-wrapper">
-                    <label style="font-weight: 700; color: var(--primary); display: block; margin-bottom: 0.5rem;">✨ UPDATE YOUR HOARD IN REAL-TIME</label>
-                    <textarea id="aiInput" placeholder="Speak, friend, and enter your monthly expenses..."></textarea>
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="runDemo()" style="background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Interpret & Save</button> 
-                        <button onclick="resetDemo()" style="background: #E7E5E4; color: #57534E;">Reset Scrolls</button>
-                    </div>
-                </div>
+        <!-- Input Section Always Visible -->
+        <div class="card ai-input-wrapper">
+            <label style="font-weight: 700; color: var(--primary); display: block; margin-bottom: 0.5rem;">✨ UPDATE YOUR HOARD IN REAL-TIME</label>
+            <textarea id="aiInput" placeholder="Speak, friend, and enter your monthly expenses..."></textarea>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="runDemo()" style="background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Interpret & Save</button> 
+                <button onclick="resetDemo()" style="background: #E7E5E4; color: #57534E; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Reset Scrolls</button>
+            </div>
+        </div>
 
+        <!-- Data Display Hidden by Default -->
+        <div class="main-layout" id="dashboardContent">
+            <div class="content-col">
                 <div class="split-grid">
                     <div class="card">
                         <span class="badge">Fixed (Monthly Rations)</span>
@@ -91,7 +94,7 @@
                     <div class="account-type">Sackville Bank</div>
                 </div>
 
-                <div class="mini-goal-card" id="miniGoalWidget" style="display: none;">
+                <div class="mini-goal-card" id="miniGoalWidget">
                     <div class="account-name" style="color: #92400e;">Active Quest</div>
                     <div id="miniGoalTitle" style="font-weight: 800; font-size: 1rem; margin: 5px 0;">Reclaiming Bag End</div>
                     <div class="mini-bar-bg"><div id="miniBarFill" class="mini-bar-fill"></div></div>
@@ -110,8 +113,6 @@
         };
 
         function runDemo() {
-            // Calculated: (Daily x 30)
-            // Breakfast: 600, 2nd B: 750, Elevenses: 450, Luncheon: 1200, Tea: 600, Dinner: 1800, Supper: 900
             const demoPrompt = "Income is 10000 gold. Rent is 1200, Pony is 350. Monthly meals: Breakfast (600), Second Breakfast (750), Elevenses (450), Luncheon (1200), Afternoon Tea (600), Dinner (1800), and Supper (900). Plus 80 for polish and 200 for umbrellas.";
             document.getElementById('aiInput').value = demoPrompt;
             
@@ -143,16 +144,18 @@
 
         function loadDashboard() {
             const data = JSON.parse(localStorage.getItem('capitelle_data'));
+            const content = document.getElementById('dashboardContent');
+            const widget = document.getElementById('miniGoalWidget');
             const fList = document.getElementById('fixedList'), lList = document.getElementById('lifeList');
             
             if (!data) {
-                fList.innerHTML = "<li>No scrolls recorded...</li>";
-                lList.innerHTML = "<li>No scrolls recorded...</li>";
-                document.getElementById('fixedTotal').innerText = "Total Fixed: $0";
-                document.getElementById('lifeTotal').innerText = "Total Lifestyle: $0";
-                document.getElementById('miniGoalWidget').style.display = "none";
+                content.style.display = "none";
+                widget.style.display = "none";
                 return;
             }
+
+            // Reveal the layout
+            content.style.display = "grid";
 
             fList.innerHTML = ""; lList.innerHTML = "";
             let fTotal = 0, lTotal = 0;
@@ -172,7 +175,7 @@
 
             const savings = localStorage.getItem('capitelle_savings');
             if(savings) {
-                document.getElementById('miniGoalWidget').style.display = "block";
+                widget.style.display = "block";
                 document.getElementById('miniCur').innerText = `$${parseInt(savings).toLocaleString()}`;
                 document.getElementById('miniBarFill').style.width = "20%"; 
                 document.getElementById('aiInsightText').innerText = "AI Insight: Your monthly rations are set. You are spending $6,300 on food alone—perhaps cut back on Second Breakfast?";
