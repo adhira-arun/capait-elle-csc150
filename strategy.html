@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy | CAPITelle Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .logo { text-decoration: none; font-size: 1.6rem; font-weight: 800; }
+        .strategy-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; margin-top: 2rem; }
+        
+        /* MEAL GRID STYLES */
+        .meal-log { display: flex; flex-direction: column; gap: 15px; }
+        .meal-label-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px; }
+        .meal-name { font-weight: 700; font-size: 0.9rem; color: var(--text-main); }
+        .meal-gold { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+
+        .allowance-bar { background: #f3f4f6; height: 28px; border-radius: 8px; overflow: hidden; position: relative; border: 1px solid #e5e7eb; }
+        .allowance-fill { height: 100%; width: 0%; transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .allowance-text { position: absolute; width: 100%; text-align: center; line-height: 28px; font-size: 0.75rem; font-weight: 800; color: #374151; }
+        
+        .step-card { border-left: 4px solid #D4AF37; padding-left: 20px; margin-bottom: 20px; }
+        
+        /* Specific Meal Colors */
+        .bg-breakfast { background: #fbbf24; }
+        .bg-elevenses { background: #f59e0b; }
+        .bg-tea { background: #d97706; }
+        .bg-dinner { background: #b45309; }
+
+        @media (max-width: 900px) { .strategy-row { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo"><span class="capit">CAPIT</span><span class="elle">elle</span></a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="goals.html">Goals</a>
+            <a href="strategy.html" style="font-weight: 800; color: var(--primary);">Strategy</a>
+            <a href="settings.html" style="font-weight: 800; color: var(--text-main); margin-left: 10px;">Hi, Lobelia</a>
+            <a href="logout.html" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <span class="badge">Council Report</span>
+        <h1>The Seven-Meal Strategy</h1>
+
+        <div class="strategy-row">
+            <!-- MEAL BARS SECTION -->
+            <div class="card">
+                <h3>Daily Gold Rations</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                    Based on your recent Hoard activity, here is your remaining daily allowance.
+                </p>
+                
+                <div class="meal-log">
+                    <!-- 1. Breakfast -->
+                    <div class="meal-item">
+                        <div class="meal-label-row"><span class="meal-name">Breakfast</span><span class="meal-gold" id="m1Gold">$0 / $20</span></div>
+                        <div class="allowance-bar">
+                            <div id="m1Bar" class="allowance-fill bg-breakfast"></div>
+                            <div id="m1Txt" class="allowance-text">Empty Plate</div>
+                        </div>
+                    </div>
+                    <!-- 2. Second Breakfast -->
+                    <div class="meal-item">
+                        <div class="meal-label-row"><span class="meal-name">Second Breakfast</span><span class="meal-gold" id="m2Gold">$0 / $25</span></div>
+                        <div class="allowance-bar">
+                            <div id="m2Bar" class="allowance-fill bg-breakfast"></div>
+                            <div id="m2Txt" class="allowance-text">Empty Plate</div>
+                        </div>
+                    </div>
+                    <!-- 3. Elevenses -->
+                    <div class="meal-item">
+                        <div class="meal-label-row"><span class="meal-name">Elevenses</span><span class="meal-gold" id="m3Gold">$0 / $15</span></div>
+                        <div class="allowance-bar">
+                            <div id="m3Bar" class="allowance-fill bg-elevenses"></div>
+                            <div id="m3Txt" class="allowance-text">Empty Plate</div>
+                        </div>
+                    </div>
+                    <!-- 4. Luncheon -->
+                    <div class="meal-item">
+                        <div class="meal-label-row"><span class="meal-name">Luncheon</span><span class="meal-gold" id="m4Gold">$0 / $40</span></div>
+                        <div class="allowance-bar">
+                            <div id="m4Bar" class="allowance-fill bg-elevenses"></div>
+                            <div id="m4Txt" class="allowance-text">Empty Plate</div>
+                        </div>
+                    </div>
+                    <!-- 5. Afternoon Tea -->
+                    <div class="meal-item">
+                        <div class="meal-label-row"><span class="meal-name">Afternoon Tea</span><span class="meal-gold" id="m5Gold">$0 / $20</span></div>
+                        <div class="allowance-bar">
+                            <div id="m5Bar" class="allowance-fill bg-tea"></div>
+                            <div id="m5Txt" class="allowance-text">Empty Plate</div>
+                        </div>
+                    </div>
+                    <!-- 6. Dinner -->
+                    <div class="meal-item">
+                        <div class="meal-label-row"><span class="meal-name">Dinner</span><span class="meal-gold" id="m6Gold">$0 / $60</span></div>
+                        <div class="allowance-bar">
+                            <div id="m6Bar" class="allowance-fill bg-dinner"></div>
+                            <div id="m6Txt" class="allowance-text">Empty Plate</div>
+                        </div>
+                    </div>
+                    <!-- 7. Supper -->
+                    <div class="meal-item">
+                        <div class="meal-label-row"><span class="meal-name">Supper</span><span class="meal-gold" id="m7Gold">$0 / $30</span></div>
+                        <div class="allowance-bar">
+                            <div id="m7Bar" class="allowance-fill bg-dinner"></div>
+                            <div id="m7Txt" class="allowance-text">Empty Plate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INSIGHTS SECTION -->
+            <div>
+                <div class="card" id="logicCard" style="border-left: 6px solid #D4AF37;">
+                    <h3>Council Logic</h3>
+                    <p id="logicText">Please run the hoard demo to receive council insights.</p>
+                </div>
+
+                <div class="card" id="marchOrders" style="background: #1e293b; color: white; margin-top: 20px; display: none;">
+                    <h3 style="color: white;">The Marching Orders</h3>
+                    <div class="step-card"><p><b>1. Secure the Perimeter</b><br>Bag End Upkeep is locked in.</p></div>
+                    <div class="step-card" style="border-color: #f59e0b;"><p><b>2. The Hobbits' Bounty</b><br>Daily rations are calculated above.</p></div>
+                    <div id="goalStep" class="step-card" style="border-color: #94a3b8;"><p><b>3. The Treasure Hoard</b><br>Savings goals are currently empty.</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check for demo data every time the page loads
+        window.onload = function() {
+            const budgetData = localStorage.getItem('capitelle_data');
+            const savingsData = localStorage.getItem('capitelle_savings');
+
+            if (budgetData) {
+                applyRations();
+            }
+            if (savingsData) {
+                applyGoalInsight(savingsData);
+            }
+        };
+
+        function applyRations() {
+            // Show the sidebar
+            document.getElementById('marchOrders').style.display = "block";
+            document.getElementById('logicCard').style.borderColor = "#D4AF37";
+            document.getElementById('logicText').innerHTML = "AI Insight: Your <b>Second Breakfast</b> spending is up 40%. Consider swapping the organic Shire-sausage for standard to reach Bag End sooner.";
+
+            // Data for the bars
+            const rations = [
+                { id: 'm1', left: 15, total: 20, pct: '75%' },
+                { id: 'm2', left: 4,  total: 25, pct: '16%' },
+                { id: 'm3', left: 12, total: 15, pct: '80%' },
+                { id: 'm4', left: 30, total: 40, pct: '75%' },
+                { id: 'm5', left: 2,  total: 20, pct: '10%' },
+                { id: 'm6', left: 55, total: 60, pct: '91%' },
+                { id: 'm7', left: 28, total: 30, pct: '93%' }
+            ];
+
+            rations.forEach(r => {
+                document.getElementById(r.id + 'Bar').style.width = r.pct;
+                document.getElementById(r.id + 'Txt').innerText = `$${r.left} left`;
+                document.getElementById(r.id + 'Gold').innerText = `$${r.left} / $${r.total}`;
+            });
+        }
+
+        function applyGoalInsight(amt) {
+            document.getElementById('goalStep').innerHTML = `<p><b>3. The Treasure Hoard</b><br>Transferring ${parseInt(amt).toLocaleString()} gold pieces to Bag End Fund.</p>`;
+        }
+    </script>
+</body>
+</html>

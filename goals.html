@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goals | CAPITelle Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .logo { text-decoration: none; font-size: 1.6rem; font-weight: 800; }
+        .goals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .ai-goal-box { border: 2px solid var(--primary); background: #fff; border-radius: 15px; padding: 20px; grid-column: span 2; }
+        .ai-input { width: 100%; height: 80px; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px; margin: 10px 0; font-family: inherit; resize: none; }
+        #questLogContainer { display: contents; }
+        .goal-card { background: white; padding: 20px; border-radius: 15px; border: 1px solid var(--border); animation: slideIn 0.5s ease-out forwards; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .progress-track { background: #f3f4f6; height: 10px; border-radius: 10px; margin: 15px 0; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; transition: width 1.5s ease-in-out; }
+        .demo-btn-gold { background: #D4AF37; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; margin-bottom: 20px; }
+        .quest-log-header { grid-column: span 2; margin-top: 20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; color: var(--text-main); display: none; }
+        @media (max-width: 768px) { .goals-grid { grid-template-columns: 1fr; } .ai-goal-box { grid-column: span 1; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo"><span class="capit">CAPIT</span><span class="elle">elle</span></a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="goals.html" style="font-weight: 800; color: var(--primary);">Goals</a>
+            <a href="strategy.html">Strategy</a>
+            <a href="settings.html" style="font-weight: 800; color: var(--text-main); margin-left: 10px;">Hi, Lobelia</a>
+            <a href="logout.html" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h1>Financial Quests</h1>
+            <button class="demo-btn-gold" onclick="runGoalDemo()">💍 Forge My Future</button>
+        </div>
+
+        <div class="goals-grid">
+            <div class="ai-goal-box">
+                <span class="badge">AI Goal Architect</span>
+                <h3>Plot Your Inheritance</h3>
+                <textarea id="aiGoalInput" class="ai-input" placeholder="Tell the AI what you're saving for..."></textarea>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="runGoalDemo()" style="background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Calculate Path</button>
+                    <button onclick="resetGoals()" style="background: #f3f4f6; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Reset Scrolls</button>
+                </div>
+                <p id="aiGoalInsight" style="margin-top: 15px; font-size: 0.9rem; color: var(--text-muted); font-style: italic;">Your treasure hoard is currently empty.</p>
+            </div>
+
+            <h2 id="questHeader" class="quest-log-header">Active Quest Log</h2>
+            <div id="questLogContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // PERSISTENCE LOGIC: Check if demo already ran
+        window.onload = function() {
+            if (localStorage.getItem('capitelle_savings')) {
+                renderGoalCards();
+            }
+        };
+
+        function createGoalCard(title, current, target, badgeText, color, eta = "") {
+            const pct = (current / target) * 100;
+            const etaHtml = eta ? `<p style="font-size: 0.8rem; color: var(--text-muted);">${eta}</p>` : "";
+            return `
+                <div class="goal-card" style="border-left: 5px solid ${color}">
+                    <span class="badge" style="color: ${color}; border-color: ${color};">${badgeText}</span>
+                    <h3>${title}</h3>
+                    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                        <span>$${current.toLocaleString()}</span>
+                        <span style="font-weight: 700;">$${target.toLocaleString()}</span>
+                    </div>
+                    <div class="progress-track"><div class="progress-bar" style="background: ${color}; width: ${pct}%"></div></div>
+                    ${etaHtml}
+                </div>`;
+        }
+
+        function runGoalDemo() {
+            const input = document.getElementById('aiGoalInput');
+            input.value = "I want to reclaim Bag End (15,000 gold). I have 3,000 gold. Also need silverware (800) and an umbrella (25,000).";
+
+            setTimeout(() => {
+                localStorage.setItem('capitelle_savings', 3000); 
+                renderGoalCards();
+                input.value = "";
+            }, 1000);
+        }
+
+        function renderGoalCards() {
+            document.getElementById('questLogContainer').innerHTML = "";
+            document.getElementById('questHeader').style.display = "block";
+            
+            const goals = [
+                { t: "Reclaiming Bag End", c: 3000, tg: 15000, b: "Main Quest", col: "#D4AF37", e: "ETA: 14 months" },
+                { t: "Silverware Restoration", c: 650, tg: 800, b: "Side Quest", col: "var(--secondary)", e: "" },
+                { t: "Dragon-Proofing", c: 2500, tg: 5000, b: "Shield Guard", col: "#ef4444", e: "" },
+                { t: "The Mithril Umbrella", c: 500, tg: 25000, b: "Legendary", col: "#8b5cf6", e: "" }
+            ];
+
+            goals.forEach(g => { 
+                document.getElementById('questLogContainer').innerHTML += createGoalCard(g.t, g.c, g.tg, g.b, g.col, g.e); 
+            });
+
+            document.getElementById('aiGoalInsight').innerHTML = "AI Insight: Your hoard is synced across all scrolls.";
+        }
+
+        function resetGoals() {
+            localStorage.removeItem('capitelle_savings');
+            document.getElementById('questLogContainer').innerHTML = "";
+            document.getElementById('questHeader').style.display = "none";
+            document.getElementById('aiGoalInput').value = "";
+            document.getElementById('aiGoalInsight').innerText = "The scrolls have been burned.";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPITelle | AI Personal Finance</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .logo { text-decoration: none; font-size: 1.6rem; font-weight: 800; }
+        .preview-section { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; margin: 6rem 0; align-items: start; text-align: left; }
+        .preview-card { background: white; padding: 2rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border); height: 100%; }
+        .preview-label { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; }
+        .preview-bar { background: #f3f4f6; height: 12px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        .preview-fill { height: 100%; width: 0%; transition: width 2s cubic-bezier(0.1, 0.5, 0.1, 1); }
+        
+        /* THEMED WIDGET */
+        .savings-widget { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 1px solid #fcd34d; text-align: center; }
+        .circular-progress { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(#D4AF37 0deg, #e5e7eb 0deg); display: flex; align-items: center; justify-content: center; margin: 1.5rem auto; position: relative; transition: 1s; }
+        .circular-progress::before { content: ""; position: absolute; width: 115px; height: 115px; background: white; border-radius: 50%; }
+        .percentage-val { position: relative; font-weight: 800; font-size: 1.6rem; color: #b45309; }
+        
+        @media (max-width: 900px) { .preview-section { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo"><span class="capit">CAPIT</span><span class="elle">elle</span></a>
+        <div class="nav-links">
+            <a href="index.html" style="font-weight: 800; color: var(--primary);">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="goals.html">Goals</a>
+            <a href="strategy.html">Strategy</a>
+            <a href="settings.html" style="font-weight: 800; color: var(--text-main); margin-left: 10px;">Hi, Lobelia</a>
+            <a href="logout.html" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container" style="text-align: center; padding-top: 6rem;">
+        <span class="badge">Middle-Earth Budgeting</span>
+        <h1 style="max-width: 800px; margin: 0 auto;">One App to rule your gold, <br>and in the darkness bind your spending.</h1>
+        <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 1.5rem auto 2.5rem;">Turning messy hoarding habits into a strategic plan to reclaim Bag End from those pesky Bagginses.</p>
+        <a href="dashboard.html"><button style="font-size: 1.1rem; padding: 1rem 2.5rem; background-color: #1e293b;">Open The Hoard</button></a>
+
+        <div class="preview-section">
+            <!-- REFLECTS THE GOALS PROMPT (3000 / 15000) -->
+            <div class="preview-card savings-widget">
+                <span class="badge" style="background: #D4AF37; color: white; border: none;">The Main Quest</span>
+                <h3 style="margin-top: 1rem;">Reclaiming Bag End</h3>
+                <div class="circular-progress" id="circle"><span class="percentage-val" id="totalPercent">20%</span></div>
+                <p id="savingsStatus" style="font-size: 0.9rem; color: var(--text-main); font-weight: 600;">3,000 of 15,000 gold pieces collected</p>
+                <p style="font-size: 0.75rem; color: #92400e; margin-top: 5px;">"The spoons are within reach!"</p>
+            </div>
+
+            <!-- IMPORTANT INSIGHTS (FOOD FOCUSED) -->
+            <div class="preview-card">
+                <span class="badge" style="color: #b45309; border-color: #b45309;">Important Food Insight</span>
+                <p style="font-size: 0.85rem; margin-top: 10px; color: var(--text-muted);">The Council warns: Your daily rations are depleting rapidly.</p>
+                <div style="margin-top: 1.5rem;">
+                    <div class="preview-label"><span>Second Breakfast</span><span>$4 left</span></div>
+                    <div class="preview-bar"><div id="pBar1" class="preview-fill" style="background: #fbbf24;"></div></div>
+                    
+                    <div class="preview-label"><span>Luncheon</span><span>$30 left</span></div>
+                    <div class="preview-bar"><div id="pBar2" class="preview-fill" style="background: #f59e0b;"></div></div>
+                    
+                    <div class="preview-label"><span>Afternoon Tea</span><span>$2 left</span></div>
+                    <div class="preview-bar"><div id="pBar3" class="preview-fill" style="background: #d97706;"></div></div>
+                    
+                    <div class="preview-label"><span>Supper</span><span>$28 left</span></div>
+                    <div class="preview-bar"><div id="pBar4" class="preview-fill" style="background: #b45309;"></div></div>
+                </div>
+                <p style="font-size: 0.75rem; font-style: italic; text-align: center; color: #ef4444;">Warning: Afternoon Tea is critical!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // Set the circular progress for the Quest (20%)
+            const percent = 20;
+            const deg = percent * 3.6;
+            document.getElementById('circle').style.background = `conic-gradient(#D4AF37 ${deg}deg, #e5e7eb ${deg}deg)`;
+
+            // Animate the food bars
+            setTimeout(() => {
+                document.getElementById('pBar1').style.width = "16%"; // $4/$25
+                document.getElementById('pBar2').style.width = "75%"; // $30/$40
+                document.getElementById('pBar3').style.width = "10%"; // $2/$20
+                document.getElementById('pBar4').style.width = "93%"; // $28/$30
+            }, 500);
+        }
+    </script>
+</body>
+</html>
